@@ -1,38 +1,102 @@
-# Sistema Bancário em Python - Versão 1
+### Sistema Bancário em Python
 
-Este é um sistema bancário simples desenvolvido em Python, utilizando o terminal como interface.
+Este é um sistema bancário simples desenvolvido em Python, que permite realizar operações básicas como depósito, saque, exibição de extrato, criação de usuário e contas, e listagem de contas.
 
-## Funcionalidades
+#### Funcionalidades Implementadas:
 
-- Depósito: Permite ao usuário depositar dinheiro em sua conta bancária.
-- Saque: Permite ao usuário sacar dinheiro de sua conta bancária, respeitando saldo disponível e limite de saque.
-- Extrato Bancário: Permite ao usuário visualizar o extrato de sua conta bancária, incluindo todas as transações realizadas.
-- Sair: Permite ao usuário encerrar o programa.
+- **Depositar:** Permite adicionar um valor ao saldo da conta.
+- **Sacar:** Permite retirar um valor do saldo da conta, considerando limite de saques e saldo disponível.
+- **Extrato:** Exibe um resumo das operações realizadas e o saldo atual da conta.
+- **Nova Conta:** Cria uma nova conta associada a um usuário existente.
+- **Listar Contas:** Mostra informações detalhadas de todas as contas criadas.
+- **Novo Usuário:** Registra um novo usuário com CPF único.
 
-## Instruções de Uso
+#### Estrutura do Programa:
 
-1. Execute o programa `main.py`.
-2. Você será apresentado com um menu que oferece as seguintes opções:
-   - [D] Depósito
-   - [S] Saque
-   - [E] Extrato Bancário
-   - [Q] Sair
-3. Selecione a opção desejada digitando a letra correspondente e pressionando Enter.
-4. Siga as instruções apresentadas no terminal para realizar a operação desejada.
-5. Após concluir uma operação, você retornará ao menu principal, onde poderá selecionar outra opção ou sair do programa.
+O sistema está estruturado em diversas funções que interagem para fornecer as funcionalidades mencionadas. Aqui está uma visão geral das principais partes do código:
 
-## Limitações e Observações
+- **Menu de Opções:**
+  - O menu permite ao usuário selecionar a operação desejada utilizando abreviações de comandos.
+  - As operações incluem depósito, saque, exibição de extrato, criação de usuário, criação de conta e listagem de contas.
 
-- O sistema utiliza o terminal como interface, sem interface gráfica.
-- O saldo inicial é zero e o limite de saque é de R$ 500,00.
-- O número máximo de saques é limitado a 3.
-- O sistema não possui persistência de dados entre execuções; todas as informações são perdidas quando o programa é encerrado.
+- **Funções Principais:**
+  - `menu()`: Exibe o menu ao usuário e retorna a opção escolhida.
+  - `depositar(saldo, valor, extrato)`: Realiza a operação de depósito e atualiza o saldo e o extrato da conta.
+  - `sacar(saldo, valor, extrato, limite, numero_saques, limite_saques)`: Realiza a operação de saque verificando saldo, limite e número de saques.
+  - `exibir_extrato(saldo, extrato)`: Exibe um resumo das transações realizadas e o saldo atual.
+  - `criar_usuario(usuarios)`: Registra um novo usuário no sistema, solicitando informações como CPF, nome, data de nascimento e endereço.
+  - `filtrar_usuario(cpf, usuarios)`: Filtra um usuário existente pelo CPF.
+  - `criar_conta(agencia, numero_conta, usuarios)`: Cria uma nova conta associada a um usuário existente, após informar o CPF do usuário.
+  - `listar_contas(contas)`: Mostra detalhes de todas as contas criadas, incluindo agência, número da conta e nome do titular.
 
-## Contribuição
+- **Execução Principal:**
+  - O programa principal (`main()`) gerencia o fluxo de execução, chamando as funções apropriadas de acordo com a opção selecionada pelo usuário.
+
+#### Execução do Programa:
+
+Para executar o programa, basta rodar o script Python. O sistema continuará em execução até que o usuário escolha a opção de sair (`Q`).
+
+```python
+def main():
+    # Inicialização de variáveis
+    LIMITE_SAQUES = 3
+    AGENCIA = "0001"
+    saldo = 0
+    limite = 500
+    extrato = ""
+    numero_saques = 0
+    usuarios = []
+    contas = []
+
+    # Loop principal do programa
+    while True:
+        opcao = menu()
+
+        if opcao == "D":
+            valor = float(input("Informe o valor do depósito: "))
+            saldo, extrato = depositar(saldo, valor, extrato)
+
+        elif opcao == "S":
+            valor = float(input("Informe o valor do saque: "))
+            saldo, extrato = sacar(
+                saldo=saldo,
+                valor=valor,
+                extrato=extrato,
+                limite=limite,
+                numero_saques=numero_saques,
+                limite_saques=LIMITE_SAQUES,
+            )
+
+        elif opcao == "E":
+            exibir_extrato(saldo, extrato=extrato)
+
+        elif opcao == "NU":
+            criar_usuario(usuarios)
+
+        elif opcao == "NC":
+            numero_conta = len(contas) + 1
+            conta = criar_conta(AGENCIA, numero_conta, usuarios)
+            if conta:
+                contas.append(conta)
+
+        elif opcao == "LC":
+            listar_contas(contas)
+
+        elif opcao == "Q":
+            break
+
+        else:
+            print("Operação inválida, por favor selecione novamente a operação desejada.")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### Contribuição
 
 Contribuições são bem-vindas! Se você quiser melhorar este sistema bancário, sinta-se à vontade para fazer um fork do repositório, implementar suas melhorias e enviar um pull request.
 
-## Autor
+### Autor
 
 Este sistema bancário em Python foi desenvolvido por [Luiz Eduardo](https://github.com/edufrannca).
-
